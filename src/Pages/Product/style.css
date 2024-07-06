@@ -1,0 +1,36 @@
+.filter-item {
+    margin-bottom: 10px;
+    cursor: pointer;
+  }
+  
+  .custom-control-label {
+    display: inline-block;
+    margin-right: 10px;
+  }
+  
+  .dropdown-icon {
+    float: right;
+  }
+  
+  .sub-categories {
+    margin-left: 20px;
+    margin-top: 5px;
+  }
+  .custom-control-label{
+    font-size: 26px;
+  }
+  .level-1 .custom-control-label {
+    font-weight: bold;
+  }
+  
+  .level-2 .custom-control-label {
+    font-style: italic;
+  }
+  
+  .level-3 .custom-control-label {
+    color: #666;
+  }
+  .product-image{
+    height: 300px !important;
+  }
+  

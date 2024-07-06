@@ -1,0 +1,61 @@
+.sidebar {
+  min-height: calc(100vh - 97px);
+  background: #f4f5f7;
+  font-family: "Manrope", sans-serif;
+  font-weight: 500;
+  padding: 0;
+  width: 260px;
+  z-index: 11;
+  transition: width 0.25s ease, background 0.25s ease;
+  -webkit-transition: width 0.25s ease, background 0.25s ease;
+  -moz-transition: width 0.25s ease, background 0.25s ease;
+  -ms-transition: width 0.25s ease, background 0.25s ease;
+}
+.page-body-wrapper {
+  min-height: calc(100vh - 97px);
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-direction: row;
+  flex-direction: row;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  padding-top: 97px;
+}
+.container-fluid {
+  display: flex;
+  flex-wrap: inherit;
+}
+.main-panel {
+  transition: width 0.25s ease, margin 0.25s ease;
+  width: calc(100% - 220px);
+  min-height: calc(100vh - 97px);
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-direction: column;
+  flex-direction: column;
+}
+.content-wrapper {
+  background: #f4f5f7;
+  padding: 1.5rem 2.187rem 1.5rem 3.5rem;
+  width: 100%;
+  -webkit-flex-grow: 1;
+  flex-grow: 1;
+}
+.navbar .navbar-menu-wrapper .navbar-nav .nav-item {
+  margin-left: 1.25rem;
+}
+.nav-1 {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  justify-content: center;
+  padding: 40px;
+  gap: 20px;
+}
+
+.menu-title {
+  font-size: 16px;
+}
+.bts{
+  color: brown;
+}

@@ -1,0 +1,13 @@
+.card {
+    border-radius: 10px !important;
+    text-align: left;
+}
+.card .card-body {
+    padding: 1.5rem 1.5rem;
+}
+.card .card-title {
+    color: #010101;
+    margin-bottom: 1.2rem;
+    text-transform: capitalize;
+    font-weight: 600;
+}

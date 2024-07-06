@@ -1,0 +1,49 @@
+.card {
+    border-radius: 10px !important;
+}
+.card .card-body {
+    padding: 1.5rem 1.5rem;
+}
+.card .card-title {
+    color: #010101;
+    margin-bottom: 1.2rem;
+    text-transform: capitalize;
+    font-weight: 600;
+}
+.filter-item {
+    margin-bottom: 10px; /* Điều chỉnh khoảng cách giữa các mục */
+  }
+  
+  .custom-dropdown1 {
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .custom-dropdown1:hover {
+    background-color: #f0f0f0; /* Màu nền khi hover */
+  }
+  
+  .custom-control-label {
+    text-decoration: none;
+    color: #333;
+  }
+  
+  .dropdown-icon {
+    margin-left: auto; /* Đẩy biểu tượng xuống bên phải */
+  }
+  
+  .sub-categories1 {
+    margin-top: 8px; /* Khoảng cách giữa các danh mục con */
+    padding-left: 20px; /* Lề bên trái cho danh mục con */
+  }
+  
+  .bi {
+    vertical-align: middle; /* Canh chỉnh biểu tượng giữa dòng */
+  }
+ 
+  
