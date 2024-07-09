@@ -39,8 +39,8 @@ function ProductTable() {
                   <td>{item.price}</td>
                   <td>{item.countProduct}</td>
                   <td>
-                    <button>Sua</button>
-                    <button>Xoa</button>
+                    <button className="btn-action btn-action-c">Sửa</button>
+                    <button className="btn-action btn-action-d">Xóa</button>
                   </td>
                 </tr>
               ))}

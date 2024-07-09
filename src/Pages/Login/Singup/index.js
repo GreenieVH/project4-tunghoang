@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { register } from "~/Context/api";
 
 function Singup() {
   const [username, setUsername] = useState("");
@@ -7,39 +9,10 @@ function Singup() {
   const [password, setPassword] = useState("");
   const [repassword, setRepassword] = useState("");
   const [error, setError] = useState("");
+  const navigate = useNavigate()
 
-  const register = async (username, password,useremail) => {
-    const datap = {
-      "username": username,
-      "userpass": password,
-      "email": useremail,
-    }
-    console.log(datap)
-    try {
-      const response = await fetch(
-        "http://26.78.185.194:5050/api/authoz/register",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(datap),
-        }
-      );
-      const data = await response.json();
-      console.log(data);
-      if (!response.ok) {
-        setError(data.message)
-        return
-      }
-      setError("");
-      alert("Đăng ký thành công!!")
-    } catch (err) {
-      setError("Đăng ký thất bại. Vui lòng kiểm tra lại thông tin.");
-    }
-  };
 
-  const handleSubmit = (event)=>{
+  const handleSubmit = async (event)=>{
     event.preventDefault();
     if (!username || !password || !repassword || !useremail) {
       setError("Vui lòng điền đầy đủ thông tin.");
@@ -49,7 +22,21 @@ function Singup() {
       setError("Mật khẩu và xác nhận mật khẩu không khớp.");
       return;
     }
-    register(username, password,useremail);
+    try {
+      const response = await register(username, password,useremail);
+      if (response?.error) {
+        setError(response.error);
+      } else if (response?.data) {
+        setError("");
+        alert("Đăng Ký thành công!!");
+        navigate("/login/signin");  
+      } else {
+        setError("Đã xảy ra lỗi không xác định.");
+      }
+    } catch (error) {
+      console.error("Error during login:", error);
+      setError("Đăng nhập thất bại. Vui lòng kiểm tra lại thông tin.");
+    }
   }
 
   return (
@@ -62,11 +49,11 @@ function Singup() {
       >
         <form onSubmit={handleSubmit}>
           <div className="form-group">
-            <label htmlFor="register-email-2">Your Name*</label>
+            <label htmlFor="register-name-2">Your Name*</label>
             <input
               type="text"
               className="form-control"
-              id="register-email-2"
+              id="register-name-2"
               name="register-email"
               required=""
               value={username}
@@ -99,11 +86,11 @@ function Singup() {
             />
           </div>
           <div className="form-group">
-            <label htmlFor="register-password-2">Repassword *</label>
+            <label htmlFor="register-repassword-2">Repassword *</label>
             <input
               type="password"
               className="form-control"
-              id="register-password-2"
+              id="register-repassword-2"
               name="register-password"
               required=""
               value={repassword}

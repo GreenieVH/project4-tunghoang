@@ -11,3 +11,16 @@
     text-transform: capitalize;
     font-weight: 600;
 }
+.btn-action {
+    border-radius: 5px;
+    border: none;
+    padding: 5px 10px;
+    color: white;
+}
+.btn-action-c{
+    background-color: cadetblue;
+    margin-right: 10px;
+}
+.btn-action-d{
+    background-color: crimson;
+}

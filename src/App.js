@@ -22,6 +22,40 @@ function App() {
               } else if (route.layout === null) {
                 Layout = Fragment;
               }
+              return (
+                <Route 
+                  key={index}
+                  path={route.path}
+                  element={
+                    <Layout>
+                      <Page />
+                    </Layout>
+                  }
+                >
+                  {route.children &&
+                    route.children.map((childRoute, childIndex) => {
+                      const ChildPage = childRoute.component;
+                      return (
+                        <Route
+                          key={childIndex}
+                          path={childRoute.path}
+                          element={<ChildPage />}
+                        />
+                      );
+                    })}
+                </Route>
+              );
+            })}
+            {adminRoutes.map((route, index) => {
+              const Page = route.component;
+
+              let Layout = AdminLayout;
+
+              if (route.layout) {
+                Layout = route.layout;
+              } else if (route.layout === null) {
+                Layout = Fragment;
+              }
 
               return (
                 <Route
@@ -47,41 +81,6 @@ function App() {
                 </Route>
               );
             })}
-             {adminRoutes.map((route, index) => {
-            const Page = route.component;
-
-            let Layout = AdminLayout;
-
-            if (route.layout) {
-              Layout = route.layout;
-            } else if (route.layout === null) {
-              Layout = Fragment;
-            }
-
-            return (
-              <Route
-                key={index}
-                path={route.path}
-                element={
-                  <Layout>
-                    <Page />
-                  </Layout>
-                }
-              >
-                {route.children &&
-                  route.children.map((childRoute, childIndex) => {
-                    const ChildPage = childRoute.component;
-                    return (
-                      <Route
-                        key={childIndex}
-                        path={childRoute.path}
-                        element={<ChildPage />}
-                      />
-                    );
-                  })}
-              </Route>
-            );
-          })}
           </Routes>
         </div>
       </Styles>

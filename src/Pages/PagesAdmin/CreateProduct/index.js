@@ -53,20 +53,7 @@ function CreateProduct() {
       formDataToSend.append("idCategory", formData.idCategory);
       formDataToSend.append("idBrand", formData.idBrand);
       formDataToSend.append("img", formData.image);
-      // console.log(formDataToSend)
-      // const response = await fetch("http://26.78.185.194:5050/api/product", {
-      //   method: "POST",
-      //   body: formDataToSend,
-      //   headers: {
-      //   }
-      // });
-  
-      // if (!response.ok) {
-      //   throw new Error(`HTTP error! Status: ${response.status}`);
-      // }
-  
-      // const data = await response.json();
-      // console.log("Product created:", data);
+      
       const data = await createProduct(formDataToSend);
       console.log("Product created:", data);
     } catch (error) {

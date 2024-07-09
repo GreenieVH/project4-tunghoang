@@ -1,6 +1,7 @@
 import React, {  useState } from "react";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
+import { login } from "~/Context/api";
 
 function Signin() {
   
@@ -9,42 +10,27 @@ function Signin() {
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
-  const login = async (username, password) => {
-    const datat = {
-      "username": username,
-      "userpass": password,
-    };
-    console.log(datat);
-    try {
-      const response = await fetch("http://localhost:5050/api/authoz/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(datat),
-        credentials: 'include'
-      });
-      const data = await response.json();
-      // console.log(data);
-      if (!response.ok) {
-        setError(data.message || "Đăng nhập thất bại");
-        return;
-      }
-      setError("");
-      navigate("/product");  // Điều hướng về trang /product
-      alert("Đăng nhập thành công!!")
-    } catch (err) {
-      setError("Đăng nhập thất bại. Vui lòng kiểm tra lại thông tin.");
-    }
-  };
-
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     if (!username || !password) {
       setError("Vui lòng điền đầy đủ thông tin.");
       return;
     }
-    login(username, password);
+    try {
+      const response = await login(username, password);
+      if (response?.error) {
+        setError(response.error);
+      } else if (response?.data) {
+        setError("");
+        alert("Đăng nhập thành công!!");
+        navigate("/product");  // Điều hướng về trang /product
+      } else {
+        setError("Đã xảy ra lỗi không xác định.");
+      }
+    } catch (error) {
+      console.error("Error during login:", error);
+      setError("Đăng nhập thất bại. Vui lòng kiểm tra lại thông tin.");
+    }
   };
   return (
     <div className="tab-content">

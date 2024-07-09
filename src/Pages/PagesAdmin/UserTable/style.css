@@ -1,0 +1,26 @@
+.card {
+    border-radius: 10px !important;
+    text-align: left;
+}
+.card .card-body {
+    padding: 1.5rem 1.5rem;
+}
+.card .card-title {
+    color: #010101;
+    margin-bottom: 1.2rem;
+    text-transform: capitalize;
+    font-weight: 600;
+}
+.btn-action {
+    border-radius: 5px;
+    border: none;
+    padding: 5px 10px;
+    color: white;
+}
+.btn-action-c{
+    background-color: cadetblue;
+    margin-right: 10px;
+}
+.btn-action-d{
+    background-color: crimson;
+}

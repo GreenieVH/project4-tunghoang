@@ -2,6 +2,57 @@
 import { useState, useEffect } from "react";
 import config from "./config";
 
+export const login = async (username, password) => {
+  const datat = {
+    "username": username,
+    "userpass": password,
+  };
+  try {
+    const response = await fetch(`${config.apiBaseUrl}/api/authoz/login`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(datat),
+      credentials: 'include'
+    });
+    const data = await response.json();
+    if (!response.ok) {
+      return { error: data.message || "Đăng nhập thất bại" };
+    }
+    return { data };
+  } catch (err) {
+    return { error: "Đăng nhập thất bại. Vui lòng kiểm tra lại thông tin." };
+  }
+};
+export const register = async (username, password,useremail) => {
+  const datap = {
+    "username": username,
+    "userpass": password,
+    "email": useremail,
+  }
+  console.log(datap)
+  try {
+    const response = await fetch(
+      `${config.apiBaseUrl}/api/authoz/register`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(datap),
+      }
+    );
+    const data = await response.json();
+    console.log(data);
+    if (!response.ok) {
+      return { error: data.message || "Đăng ký thất bại" };
+    }
+    return { data };
+  } catch (err) {
+    return { error: "Đăng ký thất bại. Vui lòng kiểm tra lại thông tin." };
+  }
+};
 export function useFetchBrands() {
   const [brands, setBrands] = useState([]);
   const [error, setError] = useState(null);
@@ -46,25 +97,6 @@ export function useFetchCategory() {
 
   return {categories,error}
 }
-export const createProduct = async (formData) => {
-  try {
-    const response = await fetch(`${config.apiBaseUrl}/api/product`, {
-      method: "POST",
-      body: formData,
-      headers: {}
-    });
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
-    }
-
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error("Error creating product:", error);
-    throw error;
-  }
-};
 export function useProductList() {
   const [product, setProduct] = useState([]);
   const [error, setError] = useState(null);
@@ -85,3 +117,96 @@ export function useProductList() {
   }, []);
   return {product,error}
 }
+export const createProduct = async (formData) => {
+  try {
+    const response = await fetch(`${config.apiBaseUrl}/api/product`, {
+      method: "POST",
+      body: formData,
+      credentials: 'include',
+      headers: {}
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error creating product:", error);
+    throw error;
+  }
+};
+export const createBrand = async (name) => {
+  try {
+    const response = await fetch(`${config.apiBaseUrl}/api/brand`, {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include',
+      body: JSON.stringify(name), 
+    });
+    const data = await response.text();
+
+    if (!response.ok) {
+      throw new Error(`${data}`);
+    }
+    return data;
+  } catch (error) {
+    console.error("Error creating brand:", error);
+    throw error;
+  }
+};
+export const updateBrand = async (id,newName,newIsActive) => {
+  const datat = {
+    "id": id,
+    "isActive": newIsActive,
+    "name":newName
+  }
+  try {
+    const response = await fetch(`${config.apiBaseUrl}/api/brand`, {
+      method: "PUT",
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include',
+      body: JSON.stringify(datat), 
+    });
+    const data = await response.text();
+
+    if (!response.ok) {
+      throw new Error(`${data}`);
+    }
+
+    return data;
+  } catch (error) {
+    console.error("Error creating brand:", error);
+    throw error;
+  }
+};
+export const createCategory = async (name,id) => {
+  const datat = {
+    'name': name,
+    'parentID' : id
+  }
+  try {
+    const response = await fetch(`${config.apiBaseUrl}/api/category`, {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include',
+      body: JSON.stringify(datat), 
+    });
+    const data = await response.text();
+    
+    if (!response.ok) {
+      throw new Error(data);
+    }
+    return data;
+  } catch (errors) {
+    console.error("Error creating category:", errors);
+    throw errors;
+  }
+};

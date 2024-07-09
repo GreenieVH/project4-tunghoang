@@ -27,7 +27,10 @@ function UserTable() {
                 <td>Herman Beck</td>
                 <td>$ 77.99</td>
                 <td>May 15, 2015</td>
-                <td><button>Suwar</button><button>Xoas</button></td>
+                <td>
+                    <button className="btn-action btn-action-c">Sửa</button>
+                    <button className="btn-action btn-action-d">Xóa</button>
+                  </td>
               </tr>
             </tbody>
           </table>

@@ -1,0 +1,63 @@
+.card {
+    border-radius: 10px !important;
+    text-align: left;
+}
+.card .card-body {
+    padding: 1.5rem 1.5rem;
+}
+.card .card-title {
+    color: #010101;
+    margin-bottom: 1.2rem;
+    text-transform: capitalize;
+    font-weight: 600;
+}
+.btn-action {
+    border-radius: 5px;
+    border: none;
+    padding: 5px 10px;
+    color: white;
+}
+.btn-action-c{
+    background-color: cadetblue;
+    margin-right: 10px;
+}
+.btn-action-d{
+    background-color: crimson;
+}
+.update-brand-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Hiệu ứng mờ nền */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* Đảm bảo giá trị này lớn hơn giá trị z-index của các thành phần khác */
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+  }
+  
+  .update-brand-overlay.show {
+    opacity: 1;
+    visibility: visible;
+  }
+  
+  .update-brand-content {
+    background-color: white;
+    padding: 20px;
+    width: 90%; /* Chiều rộng chiếm 90% màn hình */
+    max-width: 1200px; /* Đảm bảo không vượt quá 1200px */
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transform: scale(0.9);
+    transition: transform 0.3s ease;
+  }
+  
+  .update-brand-overlay.show .update-brand-content {
+    transform: scale(1);
+  }
+  
+  

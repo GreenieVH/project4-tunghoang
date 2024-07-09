@@ -204,7 +204,7 @@ function Product() {
                           </h3>
                           {/* End .product-title */}
                           <div className="product-price">
-                            <span className="out-price">$120.00</span>
+                            <span className="out-price">$120.00  <del>$12</del> </span>
                           </div>
                           {/* End .product-price */}
                           <div className="ratings-container">
