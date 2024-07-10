@@ -1,61 +1,237 @@
+import { useState } from "react";
 import './style.css'
+import { updateProduct, useFetchBrands, useFetchCategory } from "~/Context/api";
 
-function UpdateProduct() {
+function UpdateProduct({product,onUpdate,onCancel}) {
+  const { brands, error: errorBrands } = useFetchBrands();
+  const { categories, error: errorCategories } = useFetchCategory();
+
+  const [formData, setFormData] = useState({
+    id:product.id,
+    name: product.name,
+    describe: product.describe,
+    price: product.price,
+    priceSale: product.priceSale,
+    isSale: product.isSale,
+    isActive: product.isActive.toString(),
+    countProduct: product.countProduct,
+    idCategory: product.idCategory,
+    idBrand: product.idBrand,
+    image: null,
+  });
+
+  const handleInputChange = (e) => {
+    const { id, value } = e.target;
+    if (e.target.type === "file") {
+      setFormData({
+        ...formData,
+        image: e.target.files[0]
+      });
+    } else {
+      setFormData({
+        ...formData,
+        [e.target.id]: id === "isActive" || id === "isSale" ? value === "true" : value
+      });
+    }
+  };
+
+  const handleClick = (categoryId) => {
+    setFormData({
+      ...formData,
+      idCategory: categoryId 
+    });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+  
+    try {
+      const formDataToSend = new FormData();
+      formDataToSend.append("id", formData.id);
+      formDataToSend.append("name", formData.name);
+      formDataToSend.append("describe", formData.describe);
+      formDataToSend.append("price", formData.price);
+      formDataToSend.append("priceSale", formData.priceSale);
+      formDataToSend.append("isSale", formData.isSale);
+      formDataToSend.append("isActive", formData.isActive);
+      formDataToSend.append("countProduct", formData.countProduct);
+      formDataToSend.append("idCategory", formData.idCategory);
+      formDataToSend.append("idBrand", formData.idBrand);
+      formDataToSend.append("img", formData.image);
+      
+      const data = await updateProduct(formDataToSend);
+      onUpdate();
+      console.log("Product created:", data);
+    } catch (error) {
+      console.error("Error creating product:", error);
+    }
+  };
+  
+
+  const renderCategories = (categories, level = 1) => {
+    return categories.map((category) => (
+      <CategoryItem key={category.id} category={category} level={level} />
+    ));
+  };
+
+  const CategoryItem = ({ category, level }) => {
+    const [isOpen, setIsOpen] = useState(false);
+
+    const toggleOpen = () => {
+      setIsOpen(!isOpen);
+    };
+
+    return (
+      <div className={`filter-item level-${level}`}>
+        <div className="custom-control custom-dropdown1" onClick={toggleOpen}>
+          <a className="custom-control-label" onClick={() => handleClick(category.id)}>
+            {category.name}
+          </a>
+
+          {category.subCategories.length > 0 && (
+            <span className="dropdown-icon">
+              {isOpen ? (
+                <i className="bi bi-caret-up-fill"></i>
+              ) : (
+                <i className="bi bi-caret-down-fill"></i>
+              )}
+            </span>
+          )}
+        </div>
+        {isOpen && category.subCategories.length > 0 && (
+          <div className="sub-categories1">
+            {renderCategories(category.subCategories, level + 1)}
+          </div>
+        )}
+      </div>
+    );
+  };
+
   return (
     <div className="card">
+      <p>{errorCategories || errorBrands }</p>
       <div className="card-body">
-        <h4 className="card-title">Update Product</h4>
-        <p className="card-description">Basic form layout</p>
-        <form className="forms-sample">
+        <h4 className="card-title">Create Product</h4>
+        <form className="forms-sample" >
           <div className="form-group">
-            <label htmlFor="exampleInputUsername1">Username</label>
+            <label htmlFor="name">Name</label>
             <input
               type="text"
               className="form-control"
-              id="exampleInputUsername1"
-              placeholder="Username"
+              id="name"
+              value={formData.name}
+              onChange={handleInputChange}
+              placeholder="Product name.."
             />
           </div>
           <div className="form-group">
-            <label htmlFor="exampleInputEmail1">Email address</label>
+            <label htmlFor="describe">Describe</label>
             <input
-              type="email"
+              type="text"
               className="form-control"
-              id="exampleInputEmail1"
-              placeholder="Email"
+              id="describe"
+              value={formData.describe}
+              onChange={handleInputChange}
+              placeholder="Describe.."
             />
           </div>
           <div className="form-group">
-            <label htmlFor="exampleInputPassword1">Password</label>
+            <label htmlFor="price">Price</label>
             <input
-              type="password"
+              type="text"
               className="form-control"
-              id="exampleInputPassword1"
-              placeholder="Password"
+              id="price"
+              value={formData.price}
+              onChange={handleInputChange}
+              placeholder="Price.."
             />
           </div>
           <div className="form-group">
-            <label htmlFor="exampleInputConfirmPassword1">
-              Confirm Password
-            </label>
+            <label htmlFor="priceSale">Price Sale</label>
             <input
-              type="password"
+              type="text"
               className="form-control"
-              id="exampleInputConfirmPassword1"
-              placeholder="Password"
+              id="priceSale"
+              value={formData.priceSale}
+              onChange={handleInputChange}
+              placeholder="Price Sale.."
             />
+          </div>
+          <div className="form-group">
+            <label htmlFor="isSale">Is Sale</label>
+            <select
+              id="isSale"
+              className="form-control"
+              value={formData.isSale}
+              onChange={handleInputChange}
+            >
+              <option value="true">Yes</option>
+              <option value="false">No</option>
+            </select>
+          </div>
+          <div className="form-group">
+            <label htmlFor="isActive">Is Active</label>
+            <select
+              id="isActive"
+              className="form-control"
+              value={formData.isActive}
+              onChange={handleInputChange}
+            >
+              <option value="true">Active</option>
+              <option value="false">Inactive</option>
+            </select>
+          </div>
+          <div className="form-group">
+            <label htmlFor="countProduct">Count Product</label>
+            <input
+              type="text"
+              className="form-control"
+              id="countProduct"
+              value={formData.countProduct}
+              onChange={handleInputChange}
+              placeholder="Count Product.."
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="idCategory">Id Category</label>
+            {renderCategories(categories)}
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="idBrand">Id Brand</label>
+            <select
+              className="form-control"
+              id="idBrand"
+              value={formData.idBrand}
+              onChange={handleInputChange}
+            >
+              <option value="">Choose a brand</option>
+              {brands.map((brand) => (
+                <option key={brand.id} value={brand.id}>
+                  {brand.name}
+                </option>
+              ))}
+            </select>
           </div>
           <div className="form-check form-check-flat form-check-primary">
             <label className="form-check-label">
               Image
-              <input type="file" className="form-control" />
+              <input
+                type="file"
+                className="form-control"
+                onChange={handleInputChange}
+              />
             </label>
-            <image src="" />
+            <img
+              src={formData.image ? URL.createObjectURL(formData.image) : ""}
+              alt="Preview"
+              style={{width:'200px'}}
+            />
           </div>
-          <button type="submit" className="btn btn-primary me-2">
+          <button type="button" onClick={handleSubmit} className="btn btn-primary me-2">
             Submit
           </button>
-          <button className="btn btn-light">Cancel</button>
+          <button type="button" className="btn btn-light" onClick={onCancel}>Cancel</button>
         </form>
       </div>
     </div>

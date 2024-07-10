@@ -375,7 +375,7 @@ function Home() {
             >
               <div className="products">
                 <div className="row justify-content-center" >
-                  {product.slice(0,4).map((item) => (
+                  {product.filter(item => item.isActive).slice(0,4).map((item) => (
                     <div className="col-6 col-md-4 col-lg-3" key={item.id}>
                       <div className="product product-11 mt-v3 text-center">
                         <figure className="product-media">

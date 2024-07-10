@@ -33,4 +33,11 @@
   .product-image{
     height: 300px !important;
   }
+  .btn-clear{
+    background-color: #CC9966;
+    border: none;
+    border-radius: 2px;
+    padding: 5px 10px;
+    color: white;
+  }
   

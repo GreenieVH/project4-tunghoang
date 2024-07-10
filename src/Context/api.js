@@ -117,6 +117,31 @@ export function useProductList() {
   }, []);
   return {product,error}
 }
+export function useCartList() {
+  const [cart, setCart] = useState([]);
+  const [error, setError] = useState(null);
+  useEffect(() => {
+    fetch(`${config.apiBaseUrl}/api/cart`, {
+      method: "GET",
+      headers: {
+      },
+      credentials: 'include',
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        setCart(data);
+      })
+      .catch((error) => {
+        setError(error);
+      });
+  }, []);
+  return {cart,error}
+}
 export const createProduct = async (formData) => {
   try {
     const response = await fetch(`${config.apiBaseUrl}/api/product`, {
@@ -158,6 +183,53 @@ export const createBrand = async (name) => {
     throw error;
   }
 };
+export const createCategory = async (name,id) => {
+  const datat = {
+    'name': name,
+    'parentID' : id
+  }
+  try {
+    const response = await fetch(`${config.apiBaseUrl}/api/category`, {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include',
+      body: JSON.stringify(datat), 
+    });
+    const data = await response.text();
+    
+    if (!response.ok) {
+      throw new Error(data);
+    }
+    return data;
+  } catch (errors) {
+    console.error("Error creating category:", errors);
+    throw errors;
+  }
+};
+export const addCart = async (id) => {
+  console.log(id)
+  try {
+    const response = await fetch(`${config.apiBaseUrl}/api/cart`, {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include',
+      body: JSON.stringify({ idProduct: id }), 
+    });
+    const data = await response.text();
+
+    if (!response.ok) {
+      throw new Error(`${data}`);
+    }
+    return data;
+  } catch (error) {
+    console.error("Error cart:", error);
+    throw error;
+  }
+};
 export const updateBrand = async (id,newName,newIsActive) => {
   const datat = {
     "id": id,
@@ -185,14 +257,62 @@ export const updateBrand = async (id,newName,newIsActive) => {
     throw error;
   }
 };
-export const createCategory = async (name,id) => {
+export const updateCategory = async (id,newName,newIsActive) => {
   const datat = {
-    'name': name,
-    'parentID' : id
+    "id": id,
+    "name":newName,
+    "isActive": newIsActive
   }
+  console.log(datat)
   try {
     const response = await fetch(`${config.apiBaseUrl}/api/category`, {
-      method: "POST",
+      method: "PUT",
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include',
+      body: JSON.stringify(datat), 
+    });
+    const data = await response.text();
+
+    if (!response.ok) {
+      throw new Error(`${data}`);
+    }
+
+    return data;
+  } catch (error) {
+    console.error("Error creating category:", error);
+    throw error;
+  }
+};
+export const updateProduct = async (formData) => {
+  try {
+    const response = await fetch(`${config.apiBaseUrl}/api/product`, {
+      method: "PUT",
+      body: formData,
+      credentials: 'include',
+      headers: {}
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+    const data = await response.text();
+    return data;
+  } catch (error) {
+    console.error("Error creating product:", error);
+    throw error;
+  }
+};
+export const updateCart = async (id,count) => {
+  const datat = {
+    'id': id,
+    'count' : count
+  }
+  try {
+    const response = await fetch(`${config.apiBaseUrl}/api/cart`, {
+      method: "PUT",
       headers: {
         'Content-Type': 'application/json',
       },
@@ -208,5 +328,26 @@ export const createCategory = async (name,id) => {
   } catch (errors) {
     console.error("Error creating category:", errors);
     throw errors;
+  }
+};
+export const delCart = async (id) => {
+  try {
+    const response = await fetch(`${config.apiBaseUrl}/api/cart`, {
+      method: "DELETE",
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include',
+      body: id, 
+    });
+    const data = await response.text();
+
+    if (!response.ok) {
+      throw new Error(`${data}`);
+    }
+    return data;
+  } catch (error) {
+    console.error("Error cart:", error);
+    throw error;
   }
 };

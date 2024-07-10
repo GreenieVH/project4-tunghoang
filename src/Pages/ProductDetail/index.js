@@ -1,14 +1,35 @@
 import { useState } from "react";
+import { useParams } from "react-router";
 import images from "~/Assets/images";
+import { addCart, useProductList } from "~/Context/api";
+import config from "~/Context/config";
 
 function ProductDetail() {
-  const [selectedSize, setSelectedSize] = useState("#");
+  const { product, error } = useProductList();
+  const [addError, setAddError] = useState("");
+  let { id } = useParams();
 
-  const handleSizeChange = (event) => {
-    setSelectedSize(event.target.value);
-  };
+  // Tìm sản phẩm tương ứng với ID từ danh sách sản phẩm
+  const currentProduct = product.find((item) => item.id === parseInt(id));
+
+  if (!currentProduct) {
+    return <p>Loading...</p>; // Xử lý khi sản phẩm không tồn tại
+  }
+
+  const handleAddCart = async (id)=>{
+    try {
+      const data = await addCart(id);
+      alert("Đã thêm vào giỏ hàng!")
+      console.log("Đã thêm vào giỏ hàng:", data);
+      setAddError("");
+    } catch (error) {
+      console.error("Error add cart:", error);
+      setAddError(error.message);
+    }
+  }
   return (
     <main className="main">
+      <p>{error || addError}</p>
       <nav aria-label="breadcrumb" className="breadcrumb-nav border-0 mb-0">
         <div className="container d-flex align-items-center">
           <nav className="product-pager ml-auto" aria-label="Product">
@@ -31,11 +52,8 @@ function ProductDetail() {
               <i className="icon-angle-right" />
             </a>
           </nav>
-          {/* End .pager-nav */}
         </div>
-        {/* End .container */}
       </nav>
-      {/* End .breadcrumb-nav */}
       <div className="page-content">
         <div className="container">
           <div className="product-details-top">
@@ -46,9 +64,10 @@ function ProductDetail() {
                     <figure className="product-main-image dtimg">
                       <img
                         id="product-zoom"
-                        src={images.product_1_1}
+                        src={config.apiBaseUrl + '/' + currentProduct.img}
                         // "assets/images/products/single/1.jpg"
                         alt="product image"
+                        style={{height:'600px'}}
                       />
                       <a
                         href="#"
@@ -58,25 +77,18 @@ function ProductDetail() {
                         <i className="icon-arrows" />
                       </a>
                     </figure>
-                    {/* End .product-main-image */}
                   </div>
-                  {/* End .row */}
                 </div>
-                {/* End .product-gallery */}
               </div>
-              {/* End .col-md-6 */}
               <div className="col-md-6">
                 <div className="product-details">
                   <h1 className="product-title">
-                    Dark yellow lace cut out swing dress
+                  {currentProduct.name}
                   </h1>
-                  {/* End .product-title */}
                   <div className="ratings-container">
                     <div className="ratings">
                       <div className="ratings-val" style={{ width: "80%" }} />
-                      {/* End .ratings-val */}
                     </div>
-                    {/* End .ratings */}
                     <a
                       className="ratings-text"
                       href="#product-review-link"
@@ -85,42 +97,13 @@ function ProductDetail() {
                       ( 2 Reviews )
                     </a>
                   </div>
-                  {/* End .rating-container */}
-                  <div className="product-price">$84.00</div>
-                  {/* End .product-price */}
+                  <div className="product-price">${currentProduct.price}</div>
                   <div className="product-content">
                     <p>
-                      Sed egestas, ante et vulputate volutpat, eros pede semper
-                      est, vitae luctus metus libero eu augue. Morbi purus
-                      libero, faucibus adipiscing. Sed lectus.{" "}
+                     {currentProduct.describe}
                     </p>
                   </div>
-                  {/* End .product-content */}
 
-                  <div className="details-filter-row details-row-size">
-                    <label htmlFor="size">Size:</label>
-                    <div className="select-custom">
-                      <select
-                        name="size"
-                        id="size"
-                        className="form-control"
-                        value={selectedSize}
-                        onChange={handleSizeChange}
-                      >
-                        <option value="#">Select a size</option>
-                        <option value="s">Small</option>
-                        <option value="m">Medium</option>
-                        <option value="l">Large</option>
-                        <option value="xl">Extra Large</option>
-                      </select>
-                    </div>
-                    {/* End .select-custom */}
-                    <a href="#" className="size-guide">
-                      <i className="icon-th-list" />
-                      size guide
-                    </a>
-                  </div>
-                  {/* End .details-filter-row */}
                   <div className="details-filter-row details-row-size">
                     <label htmlFor="qty">Qty:</label>
                     <div className="product-details-quantity">
@@ -136,13 +119,11 @@ function ProductDetail() {
                         required=""
                       />
                     </div>
-                    {/* End .product-details-quantity */}
                   </div>
-                  {/* End .details-filter-row */}
                   <div className="product-details-action">
-                    <a href="#" className="btn-product btn-cart">
+                    <p className="btn-product btn-cart" onClick={()=>handleAddCart(currentProduct.id)}>
                       <span>add to cart</span>
-                    </a>
+                    </p>
                     <div className="details-action-wrapper">
                       <a
                         href="#"
@@ -159,16 +140,13 @@ function ProductDetail() {
                         <span>Add to Compare</span>
                       </a>
                     </div>
-                    {/* End .details-action-wrapper */}
                   </div>
-                  {/* End .product-details-action */}
                   <div className="product-details-footer">
                     <div className="product-cat">
                       <span>Category:</span>
                       <a href="#">Women</a>,<a href="#">Dresses</a>,
                       <a href="#">Yellow</a>
                     </div>
-                    {/* End .product-cat */}
                     <div className="social-icons social-icons-sm">
                       <span className="social-label">Share:</span>
                       <a
@@ -205,15 +183,10 @@ function ProductDetail() {
                       </a>
                     </div>
                   </div>
-                  {/* End .product-details-footer */}
                 </div>
-                {/* End .product-details */}
               </div>
-              {/* End .col-md-6 */}
             </div>
-            {/* End .row */}
           </div>
-          {/* End .product-details-top */}
           <div className="product-details-tab">
             <ul className="nav nav-pills justify-content-center" role="tablist">
               <li className="nav-item">
@@ -250,14 +223,10 @@ function ProductDetail() {
                               className="ratings-val"
                               style={{ width: "80%" }}
                             />
-                            {/* End .ratings-val */}
                           </div>
-                          {/* End .ratings */}
                         </div>
-                        {/* End .rating-container */}
                         <span className="review-date">6 days ago</span>
                       </div>
-                      {/* End .col */}
                       <div className="col">
                         <h4>Good, perfect size</h4>
                         <div className="review-content">
@@ -270,7 +239,6 @@ function ProductDetail() {
                             voluptas!
                           </p>
                         </div>
-                        {/* End .review-content */}
                         <div className="review-action">
                           <a href="#">
                             <i className="icon-thumbs-up" />
@@ -281,13 +249,9 @@ function ProductDetail() {
                             Unhelpful (0)
                           </a>
                         </div>
-                        {/* End .review-action */}
                       </div>
-                      {/* End .col-auto */}
                     </div>
-                    {/* End .row */}
                   </div>
-                  {/* End .review */}
                   <div className="review">
                     <div className="row no-gutters">
                       <div className="col-auto">
@@ -300,14 +264,10 @@ function ProductDetail() {
                               className="ratings-val"
                               style={{ width: "100%" }}
                             />
-                            {/* End .ratings-val */}
                           </div>
-                          {/* End .ratings */}
                         </div>
-                        {/* End .rating-container */}
                         <span className="review-date">5 days ago</span>
                       </div>
-                      {/* End .col */}
                       <div className="col">
                         <h4>Very good</h4>
                         <div className="review-content">
@@ -319,7 +279,6 @@ function ProductDetail() {
                             beatae!
                           </p>
                         </div>
-                        {/* End .review-content */}
                         <div className="review-action">
                           <a href="#">
                             <i className="icon-thumbs-up" />
@@ -330,15 +289,10 @@ function ProductDetail() {
                             Unhelpful (0)
                           </a>
                         </div>
-                        {/* End .review-action */}
                       </div>
-                      {/* End .col-auto */}
                     </div>
-                    {/* End .row */}
                   </div>
-                  {/* End .review */}
                 </div>
-                {/* End .reviews */}
               </div>
             </div>
           </div>

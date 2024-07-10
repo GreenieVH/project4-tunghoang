@@ -1,10 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import images from "~/Assets/images";
+import { useCartList } from "~/Context/api";
 
 function Header() {
   const location = useLocation();
   const [isScrolled, setIsScrolled] = useState(false);
+  const {cart} = useCartList()
+  
+  const calculateTotalItems = () => {
+    if (cart && cart.length) {
+      return cart.length;
+    }
+    return 0;
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -172,7 +181,7 @@ function Header() {
                   data-display="static"
                 >
                   <i className="icon-shopping-cart" />
-                  <span className="cart-count">2</span>
+                  <span className="cart-count">{calculateTotalItems()}</span>
                 </Link>
               </div>
             </div>

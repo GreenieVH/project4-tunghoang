@@ -22,7 +22,7 @@ export const publicRoutes = [
     { path: '/product', component: Product},
     { path: '/cart', component: Cart},
     { path: '/about', component: About},
-    { path: '/detail', component: ProductDetail},
+    { path: '/detail/:id', component: ProductDetail},
     { path: '/login', component: Login, children : [
         { path: 'signin', component: Signin },
         { path: 'signup', component: Singup }
