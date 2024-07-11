@@ -156,14 +156,15 @@ function CreateProduct() {
           </div>
           <div className="form-group">
             <label htmlFor="isSale">Is Sale</label>
-            <input
-              type="text"
-              className="form-control"
+            <select
               id="isSale"
+              className="form-control"
               value={formData.isSale}
               onChange={handleInputChange}
-              placeholder="Is Sale.."
-            />
+            >
+              <option value="true">Yes</option>
+              <option value="false">No</option>
+            </select>
           </div>
           <div className="form-group">
             <label htmlFor="countProduct">Count Product</label>

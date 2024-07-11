@@ -120,10 +120,12 @@ export function useProductList() {
 export function useCartList() {
   const [cart, setCart] = useState([]);
   const [error, setError] = useState(null);
-  useEffect(() => {
+
+  const fetchCart = () => {
     fetch(`${config.apiBaseUrl}/api/cart`, {
       method: "GET",
       headers: {
+        // Các headers cần thiết nếu có
       },
       credentials: 'include',
     })
@@ -139,9 +141,15 @@ export function useCartList() {
       .catch((error) => {
         setError(error);
       });
-  }, []);
-  return {cart,error}
+  };
+
+  useEffect(() => {
+    fetchCart(); // Gọi hàm fetchCart khi component được mount
+  }, []); // Chỉ gọi 1 lần khi component mount
+
+  return { cart, error, fetchCart, setCart };
 }
+
 export const createProduct = async (formData) => {
   try {
     const response = await fetch(`${config.apiBaseUrl}/api/product`, {
@@ -155,7 +163,7 @@ export const createProduct = async (formData) => {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
 
-    const data = await response.json();
+    const data = await response.text();
     return data;
   } catch (error) {
     console.error("Error creating product:", error);

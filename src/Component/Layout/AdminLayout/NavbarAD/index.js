@@ -11,12 +11,7 @@ function NavbarAD() {
             <span className="menu-title bts">Back to shop</span>
           </Link>
         </li>
-        <li className="nav-item">
-          <Link className="nav-link" to="/createproduct">
-            <i className="mdi mdi-grid-large menu-icon" />
-            <span className="menu-title">Create product</span>
-          </Link>
-        </li>
+
         <li className="nav-item">
           <Link className="nav-link" to="/producttable">
             <i className="mdi mdi-grid-large menu-icon" />
@@ -30,27 +25,33 @@ function NavbarAD() {
           </Link>
         </li>
         <li className="nav-item">
-          <Link className="nav-link" to="/createbrand">
-            <i className="mdi mdi-grid-large menu-icon" />
-            <span className="menu-title">Create brand</span>
-          </Link>
-        </li>
-        <li className="nav-item">
           <Link className="nav-link" to="/brandtable">
             <i className="mdi mdi-grid-large menu-icon" />
             <span className="menu-title">Brand table</span>
           </Link>
         </li>
         <li className="nav-item">
-          <Link className="nav-link" to="/createcategory">
-            <i className="mdi mdi-grid-large menu-icon" />
-            <span className="menu-title">Create category</span>
-          </Link>
-        </li>
-        <li className="nav-item">
           <Link className="nav-link" to="/categorytable">
             <i className="mdi mdi-grid-large menu-icon" />
             <span className="menu-title">Category table</span>
+          </Link>
+        </li>
+        <li className="nav-item">
+          <Link className="nav-link" to="/createproduct">
+            <i className="mdi mdi-grid-large menu-icon" />
+            <span className="menu-title">Create product</span>
+          </Link>
+        </li>
+        <li className="nav-item">
+          <Link className="nav-link" to="/createbrand">
+            <i className="mdi mdi-grid-large menu-icon" />
+            <span className="menu-title">Create brand</span>
+          </Link>
+        </li>
+        <li className="nav-item">
+          <Link className="nav-link" to="/createcategory">
+            <i className="mdi mdi-grid-large menu-icon" />
+            <span className="menu-title">Create category</span>
           </Link>
         </li>
       </ul>

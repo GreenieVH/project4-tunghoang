@@ -17,6 +17,12 @@ function ProductDetail() {
   }
 
   const handleAddCart = async (id)=>{
+    const user = JSON.parse(localStorage.getItem('user'));
+
+    if (!user) {
+      alert("Bạn phải đăng nhập để thêm sản phẩm vào giỏ hàng!");
+      return;
+    }
     try {
       const data = await addCart(id);
       alert("Đã thêm vào giỏ hàng!")

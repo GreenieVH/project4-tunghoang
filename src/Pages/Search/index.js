@@ -1,12 +1,15 @@
 import {  useState } from "react";
 
-function Search() {
+function Search({ onSearchChange }) {
   const [searchValue, setSearchValue] = useState("");
-  // const [searchResult, setSearchResult] = useState([]);
 
-  // useEffect(() => {
-  //   fetch();
-  // }, [searchValue]);
+  const handleSearchChange = (e) => {
+    const value = e.target.value;
+    setSearchValue(value);
+    if (onSearchChange) {
+      onSearchChange(value);
+    }
+  };
 
   return (
     <div className="input-group rounded toolbox-left">
@@ -18,7 +21,7 @@ function Search() {
         aria-label="Search"
         aria-describedby="search-addon"
         value={searchValue}
-        onChange={(e) => setSearchValue(e.target.value)}
+        onChange={handleSearchChange}
       />
       <span
         className="input-group-text border-0"

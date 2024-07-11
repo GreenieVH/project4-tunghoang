@@ -1,14 +1,17 @@
-import React, {  useState } from "react";
+import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { login } from "~/Context/api";
+import { UserContext } from "~/Context/userContext";
 
 function Signin() {
-  
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const { setUser } = useContext(UserContext);
   const navigate = useNavigate();
+  const user = JSON.parse(localStorage.getItem('user'));
+
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -18,12 +21,20 @@ function Signin() {
     }
     try {
       const response = await login(username, password);
+
       if (response?.error) {
         setError(response.error);
       } else if (response?.data) {
+        const user = response.data;
+        localStorage.setItem("user", JSON.stringify(user));
+        setUser(user);
         setError("");
         alert("Đăng nhập thành công!!");
-        navigate("/product");  // Điều hướng về trang /product
+        if (user && user.isAdmin) {
+          return navigate("/adminhome");
+        } else {
+          return navigate("/product");
+        }
       } else {
         setError("Đã xảy ra lỗi không xác định.");
       }
@@ -118,6 +129,5 @@ function Signin() {
     </div>
   );
 }
-
 
 export default Signin;

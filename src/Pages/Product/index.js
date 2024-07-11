@@ -1,15 +1,17 @@
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import images from "~/Assets/images";
 import Search from "../Search";
 import "./style.css";
 import {
   addCart,
+  useCartList,
   useFetchBrands,
   useFetchCategory,
   useProductList,
 } from "~/Context/api";
 import config from "~/Context/config";
+import { UserContext } from "~/Context/userContext";
 
 function Product() {
   const { categories, error: errorCategory } = useFetchCategory();
@@ -18,7 +20,10 @@ function Product() {
   const [filteredBrand, setFilteredBrand] = useState(null);
   const [filteredCategory, setFilteredCategory] = useState(null);
   const [addError, setAddError] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
+  const { setUser } = useContext(UserContext);
 
+  
   // Render categories list
   const renderCategories = (categories, level = 1) => {
     return categories.filter(item => item.isActive).map((category) => (
@@ -75,14 +80,26 @@ function Product() {
     setFilteredCategory(null);
   };
 
-  // Filter products based on selected brand and category
-  const filteredProducts = product.filter(item => {
+  // Filter products based on selected brand, category, and search term
+  const filteredProducts = product.filter((item) => {
     const brandCondition = !filteredBrand || item.idBrand === filteredBrand;
-    const categoryCondition = !filteredCategory || item.idCategory === filteredCategory;
-    return item.isActive && brandCondition && categoryCondition;
+    const categoryCondition =
+      !filteredCategory || item.idCategory === filteredCategory;
+    const searchCondition =
+      searchTerm === "" ||
+      item.name.toLowerCase().includes(searchTerm.toLowerCase());
+    return item.isActive && brandCondition && categoryCondition && searchCondition;
   });
-  //add cart
+
+  
   const handleAddCart = async (id)=>{
+    const user = JSON.parse(localStorage.getItem('user'));
+
+    if (!user) {
+      alert("Bạn phải đăng nhập để thêm sản phẩm vào giỏ hàng!");
+      return;
+    }
+    
     try {
       const data = await addCart(id);
       alert("Đã thêm vào giỏ hàng!")
@@ -112,7 +129,7 @@ function Product() {
             <div className="row">
               <div className="col-lg-9">
                 <div className="toolbox">
-                  <Search />
+                <Search onSearchChange={setSearchTerm} />
                   <div className="toolbox-right">
                     <div className="toolbox-sort">
                       <label htmlFor="sortby">Sort by:</label>

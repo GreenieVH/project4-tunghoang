@@ -1,13 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import images from "~/Assets/images";
 import { useCartList } from "~/Context/api";
+import { UserContext } from "~/Context/userContext";
+import "./style.css";
 
 function Header() {
   const location = useLocation();
   const [isScrolled, setIsScrolled] = useState(false);
-  const {cart} = useCartList()
-  
+  const { cart } = useCartList();
+  const { user, setUser } = useContext(UserContext);
+
   const calculateTotalItems = () => {
     if (cart && cart.length) {
       return cart.length;
@@ -26,6 +29,19 @@ function Header() {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
+
+  useEffect(() => {
+    const storedUser = JSON.parse(localStorage.getItem("user"));
+    setUser(storedUser);
+  }, [setUser]);
+
+  const handleLogout = () => {
+    localStorage.removeItem("user");
+    // Xóa cookie nếu có
+    document.cookie =
+      "your-cookie-name=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    setUser(null);
+  };
 
   return (
     <>
@@ -62,14 +78,25 @@ function Header() {
                       </a>
                     </li>
                     <li>
-                      <Link
-                        to="/login/signin"
-                        href="#signin-modal"
-                        data-toggle="modal"
-                      >
-                        <i className="icon-user" />
-                        Login
-                      </Link>
+                      {user ? (
+                        <div>
+                          <span style={{ paddingRight: "10px" }}>
+                            {user.userName}
+                          </span>
+                          <button className="btn-logout" onClick={handleLogout}>
+                            LOGOUT
+                          </button>
+                        </div>
+                      ) : (
+                        <Link
+                          to="/login/signin"
+                          href="#signin-modal"
+                          data-toggle="modal"
+                        >
+                          <i className="icon-user" />
+                          Login
+                        </Link>
+                      )}
                     </li>
                   </ul>
                 </li>
@@ -77,7 +104,11 @@ function Header() {
             </div>
           </div>
         </div>
-        <div className={`header-middle ${isScrolled ? "sticky header-middle-small" : ""}`}>
+        <div
+          className={`header-middle ${
+            isScrolled ? "sticky header-middle-small" : ""
+          }`}
+        >
           <div className="container">
             <div className="header-left">
               <button className="mobile-menu-toggler">
@@ -144,7 +175,7 @@ function Header() {
               </nav>
             </div>
             <div className="header-right">
-              <div className="header-search">
+              {/* <div className="header-search">
                 <a
                   href="#"
                   className="search-toggle"
@@ -153,7 +184,7 @@ function Header() {
                 >
                   <i className="icon-search" />
                 </a>
-                <form action="#" method="get">
+                <form action="" method="get">
                   <div className="header-search-wrapper">
                     <label htmlFor="q" className="sr-only">
                       Search
@@ -168,7 +199,7 @@ function Header() {
                     />
                   </div>
                 </form>
-              </div>
+              </div> */}
               <div className="dropdown cart-dropdown">
                 <Link
                   to="/cart"

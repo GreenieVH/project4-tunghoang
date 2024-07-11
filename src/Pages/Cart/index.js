@@ -5,7 +5,7 @@ import { delCart, updateCart, useCartList } from "~/Context/api";
 import config from "~/Context/config";
 
 function Cart() {
-  const { cart, error } = useCartList();
+  const { cart, error, fetchCart } = useCartList();
   const [cartItems, setCartItems] = useState([]);
   const [selectedShipping, setSelectedShipping] = useState("free-shipping");
   let cartTotal = 0;
@@ -38,23 +38,39 @@ function Cart() {
     setCartItems(updatedCartItems);
   };
 
-  const handleUpdateCart = async (item) => {
+  const handleUpdateCart = async () => {
     try {
-      cartItems.map(async (item) => {
-        const data = await updateCart(item.id, item.count);
-        alert("Cập nhật thành công!");
-      });
+      // Sử dụng Promise.all để cập nhật tất cả các sản phẩm trong giỏ hàng
+      await Promise.all(
+        cartItems.map(async (item) => {
+          const data = await updateCart(item.id, item.count);
+          return data; // Trả về dữ liệu cập nhật để sử dụng sau này (nếu cần)
+        })
+      );
+
+      // Sau khi cập nhật thành công, làm mới giỏ hàng để lấy dữ liệu mới
+      await fetchCart(); // Sử dụng fetchCart từ useCartList để làm mới dữ liệu giỏ hàng
+
+      // Hiển thị thông báo cập nhật thành công
+      alert("Cập nhật thành công!");
     } catch (error) {
-      console.error("Error updating cart item:", error);
+      console.error("Error updating cart items:", error);
     }
   };
 
   const handleDeleteCart = async (item) => {
     try {
-      const data = await delCart(item.id);
+      // Xóa sản phẩm khỏi giỏ hàng
+      await delCart(item.id);
+
+      // Sau khi xóa thành công, làm mới giỏ hàng để lấy dữ liệu mới
+      await fetchCart(); // Sử dụng fetchCart từ useCartList để làm mới dữ liệu giỏ hàng
+
+      // Hiển thị thông báo xóa thành công
       alert("Đã xóa!");
     } catch (error) {
-      console.error("Error updating cart item:", error);
+      console.error("Error deleting cart item:", error);
+
     }
   };
 
