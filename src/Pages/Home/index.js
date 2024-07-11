@@ -1,94 +1,92 @@
 // import { Carousel } from "react-responsive-carousel";
 import { Link } from "react-router-dom";
 import { useProductList } from "~/Context/api";
-import images from "~/Assets/images";
 import config from "~/Context/config";
+import images from "~/Assets/images";
+import Slider from 'react-slick';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
+
+
 function Home() {
   const { product, error: errorProduct } = useProductList();
 
-  // if (errorProduct) {
-  //   return <div>Có lỗi xảy ra khi tải dữ liệu.</div>;
-  // }
+  const Slideshow = () => {
+    const settings = {
+      dots: true,
+      infinite: true,
+      speed: 500,
+      slidesToShow: 1,
+      slidesToScroll: 1,
+      autoplay: true,
+      autoplaySpeed: 3000,
+    };
+  
+    return (
+      <div className="intro-slider-container slider-container-ratio slider-container-1 mb-2 mb-lg-0">
+        <Slider {...settings}>
+          <div className="intro-slide">
+            <figure className="slide-image">
+              <img src={images.slide1} alt="Image Description" />
+            </figure>
+            <div className="intro-content">
+              <h3 className="intro-subtitle">Topsale Collection</h3>
+              <h1 className="intro-title">
+                Living Room
+                <br />
+                Furniture
+              </h1>
+              <a href="category.html" className="btn btn-outline-white">
+                <span>SHOP NOW</span>
+                <i className="icon-long-arrow-right" />
+              </a>
+            </div>
+          </div>
+  
+          <div className="intro-slide">
+            <figure className="slide-image">
+              <img src={images.slide2} alt="Image Description" />
+            </figure>
+            <div className="intro-content">
+              <h3 className="intro-subtitle">News and Inspiration</h3>
+              <h1 className="intro-title">New Arrivals</h1>
+              <a href="category.html" className="btn btn-outline-white">
+                <span>SHOP NOW</span>
+                <i className="icon-long-arrow-right" />
+              </a>
+            </div>
+          </div>
+  
+          <div className="intro-slide">
+            <figure className="slide-image">
+              <img src={images.slide3} alt="Image Description" />
+            </figure>
+            <div className="intro-content">
+              <h3 className="intro-subtitle">Outdoor Furniture</h3>
+              <h1 className="intro-title">
+                Outdoor Dining <br />
+                Furniture
+              </h1>
+              <a href="category.html" className="btn btn-outline-white">
+                <span>SHOP NOW</span>
+                <i className="icon-long-arrow-right" />
+              </a>
+            </div>
+          </div>
+        </Slider>
+        {/* <span className="slider-loader" /> */}
+      </div>
+    );
+  };
   return (
     <>
       <main className="main">
+        <p>{errorProduct}</p>
         <div className="intro-section bg-lighter pt-5 pb-6">
           <div className="container">
             <div className="row">
               <div className="col-lg-8">
-                <div className="intro-slider-container slider-container-ratio slider-container-1 mb-2 mb-lg-0">
-                  <div
-                    className="intro-slider intro-slider-1 owl-carousel owl-simple owl-light owl-nav-inside"
-                    data-toggle="owl"
-                    data-owl-options='{
-              "nav": false,
-              "responsive": {
-                "768": {
-                  "nav": true
-                }
-              }
-            }'
-                  >
-                    <div className="intro-slide">
-                      <figure className="slide-image">
-                        <img src={images.slide1} alt="Image Description" />
-                      </figure>
-                      <div className="intro-content">
-                        <h3 className="intro-subtitle">Topsale Collection</h3>
-                        <h1 className="intro-title">
-                          Living Room
-                          <br />
-                          Furniture
-                        </h1>
-                        <a
-                          href="category.html"
-                          className="btn btn-outline-white"
-                        >
-                          <span>SHOP NOW</span>
-                          <i className="icon-long-arrow-right" />
-                        </a>
-                      </div>
-                    </div>
-
-                    <div className="intro-slide">
-                      <figure className="slide-image">
-                        <img src={images.slide2} alt="Image Description" />
-                      </figure>
-                      <div className="intro-content">
-                        <h3 className="intro-subtitle">News and Inspiration</h3>
-                        <h1 className="intro-title">New Arrivals</h1>
-                        <a
-                          href="category.html"
-                          className="btn btn-outline-white"
-                        >
-                          <span>SHOP NOW</span>
-                          <i className="icon-long-arrow-right" />
-                        </a>
-                      </div>
-                    </div>
-
-                    <div className="intro-slide">
-                      <figure className="slide-image">
-                        <img src={images.slide3} alt="Image Description" />
-                      </figure>
-                      <div className="intro-content">
-                        <h3 className="intro-subtitle">Outdoor Furniture</h3>
-                        <h1 className="intro-title">
-                          Outdoor Dining <br />
-                          Furniture
-                        </h1>
-                        <a
-                          href="category.html"
-                          className="btn btn-outline-white"
-                        >
-                          <span>SHOP NOW</span>
-                          <i className="icon-long-arrow-right" />
-                        </a>
-                      </div>
-                    </div>
-                  </div>
-                  <span className="slider-loader" />
-                </div>
+              <Slideshow  />
               </div>
 
               <div className="col-lg-4">

@@ -15,6 +15,8 @@ import ProductDetail from '~/Pages/ProductDetail'
 import ProductTable from '~/Pages/PagesAdmin/ProductTable'
 import UpdateProduct from '~/Pages/PagesAdmin/UpdateProduct'
 import UserTable from '~/Pages/PagesAdmin/UserTable'
+import Contact from '~/Pages/Contact'
+import Blog from '~/Pages/Blog'
 // import NullLayout from '~/components/Layout/NullLayout'
 
 export const publicRoutes = [
@@ -23,6 +25,8 @@ export const publicRoutes = [
     { path: '/cart', component: Cart},
     { path: '/about', component: About},
     { path: '/detail/:id', component: ProductDetail},
+    { path: '/contact', component: Contact},
+    { path: '/blog', component: Blog},
     { path: '/login', component: Login, children : [
         { path: 'signin', component: Signin },
         { path: 'signup', component: Singup }

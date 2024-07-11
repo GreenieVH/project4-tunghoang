@@ -9333,7 +9333,6 @@ small.form-text {
 .element-hover-img {
   width: 100px;
   height: 100px;
-  background-image: url('../../Assets/images/elements.png');
   background-repeat: no-repeat;
   transition: all 0.3s;
 }
@@ -16562,3 +16561,20 @@ tbody, td, tfoot, th, thead, tr{
 .flex-row, .navbar .navbar-menu-wrapper .navbar-nav, .email-wrapper .message-body .attachments-sections ul li {
   flex-direction: row !important;
 } */
+.intro-slider-container,
+.intro-slide {
+  background-color: transparent; /* Thay đổi từ #cccccc thành transparent hoặc màu khác nếu cần */
+}
+
+.intro-slider-container:before,
+.intro-slide .slide-image:before {
+  display: none; /* Xóa hoặc ẩn phần tử before */
+}
+
+.slider-container-1:before,
+.intro-slider-1 .slide-image:before {
+  padding-top: 0; /* Đặt padding-top về 0 nếu không cần thiết */
+}
+.slick-slide{
+  height: 430px !important;
+}
