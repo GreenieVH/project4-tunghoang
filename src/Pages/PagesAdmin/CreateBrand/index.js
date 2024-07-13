@@ -12,6 +12,8 @@ function CreateBrand() {
       const data = await createBrand(brandname);
       console.log("Brand created:", data);
       setError("");
+      alert('Thêm thành công!')
+      setBrandname('')
     } catch (error) {
       console.error("Error creating brand:", error);
       setError(error.message);

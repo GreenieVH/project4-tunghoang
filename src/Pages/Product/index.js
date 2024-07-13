@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import images from "~/Assets/images";
 import Search from "../Search";
@@ -17,21 +17,33 @@ function Product() {
   const { categories, error: errorCategory } = useFetchCategory();
   const { product, error: errorProduct } = useProductList();
   const { brands, error: errorBrand } = useFetchBrands();
+  const { fetchCart } = useCartList();
   const [filteredBrand, setFilteredBrand] = useState(null);
   const [filteredCategory, setFilteredCategory] = useState(null);
   const [addError, setAddError] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const { setUser } = useContext(UserContext);
+  const [visibleCount, setVisibleCount] = useState(3);
 
-  
-  // Render categories list
-  const renderCategories = (categories, level = 1) => {
-    return categories.filter(item => item.isActive).map((category) => (
-      <CategoryItem key={category.id} category={category} level={level} />
-    ));
+  const handleLoadMore = () => {
+    setVisibleCount((prevCount) => prevCount + 3);
   };
 
-  // Component for each category item
+  const renderCategories = (categories, level = 1) => {
+    return categories
+      .filter((item) => item.isActive)
+      .map((category) => (
+        <CategoryItem key={category.id} category={category} level={level} />
+      ));
+  };
+
+  const BrandName = ({ idB }) => {
+    const brand = brands.find((brand) => brand.id === idB);
+    return (
+      <p>{brand ? brand.name : 'Brand not found'}</p>
+    );
+  };
+
   const CategoryItem = ({ category, level }) => {
     const [isOpen, setIsOpen] = useState(false);
 
@@ -42,7 +54,10 @@ function Product() {
     return (
       <div className={`filter-item level-${level}`}>
         <div className="custom-control custom-dropdown" onClick={toggleOpen}>
-          <p to="" className="custom-control-label" onClick={() => filterByCategory(category.id)}>
+          <p
+            className="custom-control-label"
+            onClick={() => filterByCategory(category.id)}
+          >
             {category.name}
           </p>
           {category.subCategories.length > 0 && (
@@ -64,52 +79,70 @@ function Product() {
     );
   };
 
-  // Function to filter products by brand
   const filterByBrand = (brandId) => {
-    setFilteredBrand(brandId === filteredBrand ? null : brandId); // Apply filter or toggle if already applied
+    setFilteredBrand(brandId === filteredBrand ? null : brandId);
   };
 
-  // Function to filter products by category
+  const getAllCategoryIds = (categoryId, categories) => {
+    const result = [];
+    const stack = [categoryId];
+
+    while (stack.length) {
+      const currentId = stack.pop();
+      result.push(currentId);
+
+      const currentCategory = categories.find((cat) => cat.id === currentId);
+      if (currentCategory && currentCategory.subCategories) {
+        stack.push(...currentCategory.subCategories.map((subCat) => subCat.id));
+      }
+    }
+
+    return result;
+  };
+
   const filterByCategory = (categoryId) => {
-    setFilteredCategory(categoryId === filteredCategory ? null : categoryId); // Apply filter or toggle if already applied
+    setFilteredCategory(categoryId === filteredCategory ? null : categoryId);
   };
 
-  // Function to clear all filters
   const clearFilters = () => {
     setFilteredBrand(null);
     setFilteredCategory(null);
   };
 
-  // Filter products based on selected brand, category, and search term
   const filteredProducts = product.filter((item) => {
+    const categoryIds = filteredCategory
+      ? getAllCategoryIds(filteredCategory, categories)
+      : [];
     const brandCondition = !filteredBrand || item.idBrand === filteredBrand;
     const categoryCondition =
-      !filteredCategory || item.idCategory === filteredCategory;
+      !filteredCategory || categoryIds.includes(item.idCategory);
     const searchCondition =
       searchTerm === "" ||
       item.name.toLowerCase().includes(searchTerm.toLowerCase());
-    return item.isActive && brandCondition && categoryCondition && searchCondition;
+    return (
+      item.isActive && brandCondition && categoryCondition && searchCondition
+    );
   });
 
-  
-  const handleAddCart = async (id)=>{
-    const user = JSON.parse(localStorage.getItem('user'));
+  const handleAddCart = async (id) => {
+    const user = JSON.parse(localStorage.getItem("user"));
 
     if (!user) {
       alert("Bạn phải đăng nhập để thêm sản phẩm vào giỏ hàng!");
       return;
     }
-    
+
     try {
       const data = await addCart(id);
-      alert("Đã thêm vào giỏ hàng!")
+      alert("Đã thêm vào giỏ hàng!");
       console.log("Đã thêm vào giỏ hàng:", data);
+      await fetchCart(); 
       setAddError("");
     } catch (error) {
       console.error("Error add cart:", error);
       setAddError(error.message);
     }
-  }
+  };
 
   return (
     <>
@@ -129,7 +162,7 @@ function Product() {
             <div className="row">
               <div className="col-lg-9">
                 <div className="toolbox">
-                <Search onSearchChange={setSearchTerm} />
+                  <Search onSearchChange={setSearchTerm} />
                   <div className="toolbox-right">
                     <div className="toolbox-sort">
                       <label htmlFor="sortby">Sort by:</label>
@@ -150,7 +183,7 @@ function Product() {
                 </div>
                 <div className="products mb-3">
                   <div className="row justify-content-center">
-                    {filteredProducts.map((item) => (
+                    {filteredProducts.slice(0, visibleCount).map((item) => (
                       <div className="col-6 col-md-4 col-lg-4" key={item.id}>
                         <div className="product product-7 text-center">
                           <figure className="product-media">
@@ -188,7 +221,10 @@ function Product() {
                                 <span>Compare</span>
                               </a>
                             </div>
-                            <div className="product-action" onClick={()=>handleAddCart(item.id)}>
+                            <div
+                              className="product-action"
+                              onClick={() => handleAddCart(item.id)}
+                            >
                               <a className="btn-product btn-cart">
                                 <span>add to cart</span>
                               </a>
@@ -196,15 +232,14 @@ function Product() {
                           </figure>
                           <div className="product-body">
                             <div className="product-cat">
-                              <a href="">Jackets</a>
+                              <BrandName idB={item.idBrand}/>
                             </div>
                             <h3 className="product-title">
                               <a href="product.html">{item.name}</a>
                             </h3>
                             <div className="product-price">
                               <span className="out-price">
-                                ${item.priceSale}{" "}
-                                <del>${item.price}</del>
+                                ${item.priceSale} <del>${item.price}</del>
                               </span>
                             </div>
                             <div className="ratings-container">
@@ -224,18 +259,26 @@ function Product() {
                     ))}
                   </div>
                 </div>
-                <div className="more-container text-center">
-                  <a href="#" className="btn btn-outline-darker btn-more">
-                    <span>Load more products</span>
-                    <i className="icon-long-arrow-down" />
-                  </a>
-                </div>
+                {visibleCount < filteredProducts.length && (
+                  <div className="more-container text-center">
+                    <button
+                      onClick={handleLoadMore}
+                      className="btn btn-outline-darker btn-more"
+                    >
+                      <span>Load more products</span>
+                      <i className="icon-long-arrow-down" />
+                    </button>
+                  </div>
+                )}
               </div>
               <aside className="col-lg-3 order-lg-first">
                 <div className="sidebar sidebar-shop pd-sb">
                   <div className="widget widget-clean">
                     <label>Filters:</label>
-                    <button className="sidebar-filter-clear btn-clear" onClick={clearFilters}>
+                    <button
+                      className="sidebar-filter-clear btn-clear"
+                      onClick={clearFilters}
+                    >
                       Clear All
                     </button>
                   </div>
@@ -272,25 +315,27 @@ function Product() {
                     <div className="collapse show" id="widget-4">
                       <div className="widget-body">
                         <div className="filter-items">
-                          {brands.filter(item => item.isActive).map((item) => (
-                            <div className="filter-item" key={item.id}>
-                              <div className="custom-control custom-checkbox">
-                                <input
-                                  type="checkbox"
-                                  className="custom-control-input"
-                                  id={`brand-${item.id}`}
-                                  checked={filteredBrand === item.id}
-                                  onChange={() => filterByBrand(item.id)}
-                                />
-                                <label
-                                  className="custom-control-label"
-                                  htmlFor={`brand-${item.id}`}
-                                >
-                                  {item.name}
-                                </label>
+                          {brands
+                            .filter((item) => item.isActive)
+                            .map((item) => (
+                              <div className="filter-item" key={item.id}>
+                                <div className="custom-control custom-checkbox">
+                                  <input
+                                    type="checkbox"
+                                    className="custom-control-input"
+                                    id={`brand-${item.id}`}
+                                    checked={filteredBrand === item.id}
+                                    onChange={() => filterByBrand(item.id)}
+                                  />
+                                  <label
+                                    className="custom-control-label"
+                                    htmlFor={`brand-${item.id}`}
+                                  >
+                                    {item.name}
+                                  </label>
+                                </div>
                               </div>
-                            </div>
-                          ))}
+                            ))}
                         </div>
                       </div>
                     </div>

@@ -33,7 +33,7 @@ function Signin() {
         if (user && user.isAdmin) {
           return navigate("/adminhome");
         } else {
-          return navigate("/product");
+          return navigate("/");
         }
       } else {
         setError("Đã xảy ra lỗi không xác định.");

@@ -1,13 +1,17 @@
 import { useProductList } from "~/Context/api";
 import "./style.css";
 import config from "~/Context/config";
-import { useState } from "react";
+import {  useState } from "react";
 import UpdateProduct from "../UpdateProduct";
 
 function ProductTable() {
   const { product, error: errorProduct } = useProductList();
   const [editProduct, setEditProduct] = useState(null);
   const [errorMessage, setErrorMessage] = useState("");
+
+  // useEffect(()=>{
+  //   fetchProductList()
+  // },[product])
 
   const handleEditClick = (product) => {
     setEditProduct(product);
@@ -53,9 +57,10 @@ function ProductTable() {
                 <th>ID</th>
                 <th>Image</th>
                 <th>Name</th>
-                <th>Describe</th>
                 <th>Price</th>
+                <th>Price sale</th>
                 <th>CountProduct</th>
+                <th>isSale</th>
                 <th>Active</th>
                 <th>Actions</th>
               </tr>
@@ -72,9 +77,10 @@ function ProductTable() {
                     />
                   </td>
                   <td>{item.name}</td>
-                  <td>{item.describe}</td>
                   <td>{item.price}</td>
+                  <td>{item.priceSale}</td>
                   <td>{item.countProduct}</td>
+                  <td>{item.isSale+''}</td>
                   <td>{item.isActive+""}</td>
                   <td>
                     <button

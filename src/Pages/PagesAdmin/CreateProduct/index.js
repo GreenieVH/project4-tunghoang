@@ -5,6 +5,7 @@ import { createProduct, useFetchBrands, useFetchCategory } from "~/Context/api";
 function CreateProduct() {
   const { brands, error: errorBrands } = useFetchBrands();
   const { categories, error: errorCategories } = useFetchCategory();
+  const [nameC,setNameC] = useState('')
 
   const [formData, setFormData] = useState({
     name: "",
@@ -32,11 +33,12 @@ function CreateProduct() {
     }
   };
 
-  const handleClick = (categoryId) => {
+  const handleClick = (categoryId,nameC) => {
     setFormData({
       ...formData,
       idCategory: categoryId 
     });
+    setNameC(nameC)
   };
 
   const handleSubmit = async (e) => {
@@ -56,6 +58,18 @@ function CreateProduct() {
       
       const data = await createProduct(formDataToSend);
       console.log("Product created:", data);
+      alert('Thêm thành công!')
+      setFormData({
+        name: "",
+        describe: "",
+        price: "",
+        priceSale: "",
+        isSale: "",
+        countProduct: "",
+        idCategory: "",
+        idBrand: "",
+        image: null,
+      })
     } catch (error) {
       console.error("Error creating product:", error);
     }
@@ -82,7 +96,7 @@ function CreateProduct() {
     return (
       <div className={`filter-item level-${level}`}>
         <div className="custom-control custom-dropdown1" onClick={toggleOpen}>
-          <a className="custom-control-label" onClick={() => handleClick(category.id)}>
+          <a className="custom-control-label" onClick={() => handleClick(category.id,category.name)}>
             {category.name}
           </a>
 
@@ -178,7 +192,7 @@ function CreateProduct() {
             />
           </div>
           <div className="form-group">
-            <label htmlFor="idCategory">Id Category</label>
+            <label htmlFor="idCategory">Id Category - đã chọn: {nameC} </label>
             {renderCategories(categories)}
           </div>
 

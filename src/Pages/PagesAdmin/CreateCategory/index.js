@@ -63,6 +63,9 @@ function CreateCategory() {
       const data = await createCategory(nameCategory, idCategory);
       console.log("Category created:", data);
       setError("");
+      alert('Thêm thành công!')
+      setNameCategory('')
+      setIdCategory('')
     } catch (error) {
       setError(error.message);
     }

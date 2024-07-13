@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
 import images from "~/Assets/images";
-import { useCartList } from "~/Context/api";
+import { logout, useCartList } from "~/Context/api";
 import { UserContext } from "~/Context/userContext";
 import "./style.css";
 
@@ -10,7 +10,12 @@ function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const { cart } = useCartList();
   const { user, setUser } = useContext(UserContext);
+  const navigate = useNavigate();
 
+  // useEffect(() => {
+  //   fetchCart(); 
+  // }, [cart]); 
+  
   const calculateTotalItems = () => {
     if (cart && cart.length) {
       return cart.length;
@@ -35,12 +40,12 @@ function Header() {
     setUser(storedUser);
   }, [setUser]);
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
     localStorage.removeItem("user");
     // Xóa cookie nếu có
-    document.cookie =
-      "your-cookie-name=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    await logout();
     setUser(null);
+    navigate('/login/signin');
   };
 
   return (

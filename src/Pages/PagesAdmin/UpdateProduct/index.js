@@ -61,7 +61,7 @@ function UpdateProduct({product,onUpdate,onCancel}) {
       
       const data = await updateProduct(formDataToSend);
       onUpdate();
-      console.log("Product created:", data);
+      console.log("Product update:", data);
     } catch (error) {
       console.error("Error creating product:", error);
     }
@@ -111,7 +111,7 @@ function UpdateProduct({product,onUpdate,onCancel}) {
     <div className="card">
       <p>{errorCategories || errorBrands }</p>
       <div className="card-body">
-        <h4 className="card-title">Create Product</h4>
+        <h4 className="card-title">Update Product</h4>
         <form className="forms-sample" >
           <div className="form-group">
             <label htmlFor="name">Name</label>

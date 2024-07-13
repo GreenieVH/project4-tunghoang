@@ -1,14 +1,18 @@
 import { useFetchBrands } from "~/Context/api";
 import "./style.css";
-import { useState } from "react";
+import {  useState } from "react";
 import UpdateBrand from "../UpdateBrand";
 
 
 function BrandTable() {
-  const { brands, error } = useFetchBrands();
+  const { brands,  } = useFetchBrands();
   const [editBrand, setEditBrand] = useState(null);
   const [errorMessage, setErrorMessage] = useState("");
 
+  // useEffect(()=>{
+  //   fetchBrands()
+  // },[brands])
+  
   const handleEditClick = (brand) => {
     setEditBrand(brand);
     setTimeout(() => {

@@ -6,10 +6,16 @@ import images from "~/Assets/images";
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
+import { useState } from "react";
 
 
 function Home() {
   const { product, error: errorProduct } = useProductList();
+  const [visibleCount, setVisibleCount] = useState(4);
+
+  const handleLoadMore = () => {
+    setVisibleCount((prevCount) => prevCount + 4);
+  };
 
   const Slideshow = () => {
     const settings = {
@@ -32,14 +38,14 @@ function Home() {
             <div className="intro-content">
               <h3 className="intro-subtitle">Topsale Collection</h3>
               <h1 className="intro-title">
-                Living Room
+                Just Men
                 <br />
                 Furniture
               </h1>
-              <a href="category.html" className="btn btn-outline-white">
+              <Link to='/product' className="btn-slider btn-outline-white">
                 <span>SHOP NOW</span>
                 <i className="icon-long-arrow-right" />
-              </a>
+              </Link>
             </div>
           </div>
   
@@ -50,10 +56,10 @@ function Home() {
             <div className="intro-content">
               <h3 className="intro-subtitle">News and Inspiration</h3>
               <h1 className="intro-title">New Arrivals</h1>
-              <a href="category.html" className="btn btn-outline-white">
+              <Link to='/product' className="btn-slider btn-outline-white">
                 <span>SHOP NOW</span>
                 <i className="icon-long-arrow-right" />
-              </a>
+              </Link>
             </div>
           </div>
   
@@ -64,13 +70,13 @@ function Home() {
             <div className="intro-content">
               <h3 className="intro-subtitle">Outdoor Furniture</h3>
               <h1 className="intro-title">
-                Outdoor Dining <br />
+                Top Saled <br />
                 Furniture
               </h1>
-              <a href="category.html" className="btn btn-outline-white">
+              <Link to='/product' className="btn-slider btn-outline-white">
                 <span>SHOP NOW</span>
                 <i className="icon-long-arrow-right" />
-              </a>
+              </Link>
             </div>
           </div>
         </Slider>
@@ -314,7 +320,6 @@ function Home() {
                   className="nav-link active"
                   id="top-all-link"
                   data-toggle="tab"
-                  href="#top-all-tab"
                   role="tab"
                   aria-controls="top-all-tab"
                   aria-selected="true"
@@ -327,7 +332,6 @@ function Home() {
                   className="nav-link"
                   id="top-fur-link"
                   data-toggle="tab"
-                  href="#top-fur-tab"
                   role="tab"
                   aria-controls="top-fur-tab"
                   aria-selected="false"
@@ -340,7 +344,6 @@ function Home() {
                   className="nav-link"
                   id="top-decor-link"
                   data-toggle="tab"
-                  href="#top-decor-tab"
                   role="tab"
                   aria-controls="top-decor-tab"
                   aria-selected="false"
@@ -353,7 +356,6 @@ function Home() {
                   className="nav-link"
                   id="top-light-link"
                   data-toggle="tab"
-                  href="#top-light-tab"
                   role="tab"
                   aria-controls="top-light-tab"
                   aria-selected="false"
@@ -373,7 +375,7 @@ function Home() {
             >
               <div className="products">
                 <div className="row justify-content-center" >
-                  {product.filter(item => item.isActive).slice(0,4).map((item) => (
+                  {product.filter(item => item.isActive).slice(0,visibleCount).map((item) => (
                     <div className="col-6 col-md-4 col-lg-3" key={item.id}>
                       <div className="product product-11 mt-v3 text-center">
                         <figure className="product-media">
@@ -416,12 +418,17 @@ function Home() {
               </div>
             </div>
           </div>
-          <div className="more-container text-center">
-            <a  className="btn btn-outline-darker btn-more">
-              <span>Load more products</span>
-              <i className="icon-long-arrow-down" />
-            </a>
-          </div>
+          {visibleCount < product.length && (
+                  <div className="more-container text-center">
+                    <button
+                      onClick={handleLoadMore}
+                      className="btn btn-outline-darker btn-more"
+                    >
+                      <span>Load more products</span>
+                      <i className="icon-long-arrow-down" />
+                    </button>
+                  </div>
+                )}
           {/* End .more-container */}
         </div>
         {/* End .container */}
@@ -596,10 +603,10 @@ function Home() {
             </div> */}
           </div>
           <div className="more-container text-center mb-0 mt-3">
-            <a href="" className="btn btn-outline-darker btn-more">
+            <Link to='/blog' className="btn btn-outline-darker btn-more">
               <span>View more articles</span>
               <i className="icon-long-arrow-right" />
-            </a>
+            </Link>
           </div>
         </div>
         <div

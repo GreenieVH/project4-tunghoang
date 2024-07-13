@@ -49,10 +49,8 @@ function Cart() {
       );
 
       // Sau khi cập nhật thành công, làm mới giỏ hàng để lấy dữ liệu mới
-      await fetchCart(); // Sử dụng fetchCart từ useCartList để làm mới dữ liệu giỏ hàng
+      await fetchCart(); 
 
-      // Hiển thị thông báo cập nhật thành công
-      alert("Cập nhật thành công!");
     } catch (error) {
       console.error("Error updating cart items:", error);
     }
@@ -137,7 +135,7 @@ function Cart() {
                               </Link>
                             </figure>
                             <h3 className="product-title">
-                              <a href="/">Name pr</a>
+                              <p>{item.nameProduct}</p>
                             </h3>
                             {/* End .product-title */}
                           </div>
@@ -301,7 +299,7 @@ function Cart() {
                       <tr className="summary-shipping-estimate">
                         <td>
                           Estimate for Your Country
-                          <br /> <a href="dashboard.html">Change address</a>
+                          <br /> <a >Change address</a>
                         </td>
                         <td>&nbsp;</td>
                       </tr>
@@ -315,7 +313,6 @@ function Cart() {
                   </table>
                   {/* End .table table-summary */}
                   <a
-                    href="checkout.html"
                     className="btn btn-outline-primary-2 btn-order btn-block"
                   >
                     PROCEED TO CHECKOUT

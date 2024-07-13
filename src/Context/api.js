@@ -53,69 +53,92 @@ export const register = async (username, password,useremail) => {
     return { error: "Đăng ký thất bại. Vui lòng kiểm tra lại thông tin." };
   }
 };
+export async function logout() {
+  try {
+    const response = await fetch(`${config.apiBaseUrl}/api/authoz/logout`, {
+      method: 'DELETE', // hoặc 'GET' tùy vào API của bạn
+      credentials: 'include', // Nếu bạn cần gửi cookie
+    });
+
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+
+    // const data = await response.json();
+    // Thực hiện các hành động khác nếu cần (như xóa cookie, localStorage...)
+  } catch (error) {
+    console.error("Logout error:", error);
+  }
+}
+
 export function useFetchBrands() {
   const [brands, setBrands] = useState([]);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    const fetchBrands = async () => {
-      try {
-        const response = await fetch(`${config.apiBaseUrl}/api/brand`);
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        const data = await response.json();
-        setBrands(data);
-      } catch (error) {
-        setError(error);
+  const fetchBrands = async () => {
+    try {
+      const response = await fetch(`${config.apiBaseUrl}/api/brand`);
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
       }
-    };
+      const data = await response.json();
+      setBrands(data);
+    } catch (error) {
+      setError(error);
+    }
+  };
 
+  useEffect(() => {
     fetchBrands();
   }, []);
 
-  return { brands, error };
+  return { brands, error, fetchBrands };
 }
 export function useFetchCategory() {
   const [categories, setCategories] = useState([]);
   const [error, setError] = useState(null);
+
+  const fetchCategories = async () => {
+    try {
+      const response = await fetch(`${config.apiBaseUrl}/api/category`);
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      const data = await response.json();
+      setCategories(data);
+    } catch (error) {
+      setError(error);
+    }
+  };
+
   useEffect(() => {
-    fetch(`${config.apiBaseUrl}/api/category`)
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        return response.json();
-      })
-      .then((data) => {
-        setCategories(data);
-      })
-      .catch((error) => {
-        setError(error);
-      });
+    fetchCategories();
   }, []);
 
-  return {categories,error}
+  return { categories, error, fetchCategories };
 }
 export function useProductList() {
   const [product, setProduct] = useState([]);
   const [error, setError] = useState(null);
+
+  const fetchProductList = async () => {
+    try {
+      const response = await fetch(`${config.apiBaseUrl}/api/product`);
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      const data = await response.json();
+      setProduct(data);
+    } catch (error) {
+      setError(error);
+    }
+  };
+
   useEffect(() => {
-    fetch(`${config.apiBaseUrl}/api/product`)
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        return response.json();
-      })
-      .then((data) => {
-        setProduct(data);
-      })
-      .catch((error) => {
-        setError(error);
-      });
+    fetchProductList(); 
   }, []);
-  return {product,error}
+
+  return { product, error, fetchProductList }; 
 }
 export function useCartList() {
   const [cart, setCart] = useState([]);
@@ -216,6 +239,7 @@ export const createCategory = async (name,id) => {
     throw errors;
   }
 };
+
 export const addCart = async (id) => {
   console.log(id)
   try {
@@ -238,6 +262,7 @@ export const addCart = async (id) => {
     throw error;
   }
 };
+
 export const updateBrand = async (id,newName,newIsActive) => {
   const datat = {
     "id": id,
@@ -338,6 +363,7 @@ export const updateCart = async (id,count) => {
     throw errors;
   }
 };
+
 export const delCart = async (id) => {
   try {
     const response = await fetch(`${config.apiBaseUrl}/api/cart`, {

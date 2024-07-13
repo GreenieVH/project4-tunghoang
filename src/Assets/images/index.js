@@ -1,9 +1,9 @@
 const images = {
     slide1_480 : require('~/assets/images/slider/slide-1-480w.jpg'),
     slide2_480 : require('~/assets/images/slider/slide-2-480w.jpg'),
-    slide1 : require('~/assets/images/slider/slide-1.jpg'),
-    slide2 : require('~/assets/images/slider/slide-2.jpg'),
-    slide3 : require('~/assets/images/slider/slide-3.jpg'),
+    slide1 : require('~/assets/images/slider/slider-1.jpg'),
+    slide2 : require('~/assets/images/slider/slider-2.jpg'),
+    slide3 : require('~/assets/images/slider/slider-3.jpg'),
     banner1 : require('~/assets/images/banners/home/intro/banner-1.jpg'),
     banner2 : require('~/assets/images/banners/home/intro/banner-2.jpg'),
     banner_1 : require('~/assets/images/banners/home/banner-1.jpg'),
