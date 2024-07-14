@@ -12,9 +12,16 @@ function Header() {
   const { user, setUser } = useContext(UserContext);
   const navigate = useNavigate();
 
-  // useEffect(() => {
-  //   fetchCart(); 
-  // }, [cart]); 
+  useEffect(() => {
+    const user = localStorage.getItem("user");
+    const cookieExists = document.cookie.includes("accesstoken"); 
+
+    if (!cookieExists && user) {
+        localStorage.removeItem("user");
+        setUser(null);
+    }
+}, []);
+
   
   const calculateTotalItems = () => {
     if (cart && cart.length) {
